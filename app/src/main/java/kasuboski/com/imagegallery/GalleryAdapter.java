@@ -1,23 +1,33 @@
 package kasuboski.com.imagegallery;
 
-import android.databinding.DataBindingUtil;
+import android.content.Context;
 import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-import kasuboski.com.imagegallery.databinding.LayoutRowItemBinding;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by Josh Kasuboski on 9/14/17.
  */
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
-    private ObservableList<String> strings;
 
-    public GalleryAdapter(ObservableList<String> strings) {
-        this.strings = strings;
+    public interface ClickListener {
+        void onItemClicked(int position);
+    }
+
+    private ObservableList<String> imageUrls;
+    private Context context;
+
+    private ClickListener listener;
+
+    public GalleryAdapter(Context context, ObservableList<String> imageUrls) {
+        this.context = context;
+        this.imageUrls = imageUrls;
     }
 
     @Override
@@ -25,32 +35,39 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_row_item, parent, false);
 
-        LayoutRowItemBinding binding = DataBindingUtil.bind(v);
-        return new ViewHolder(binding);
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(GalleryAdapter.ViewHolder holder, int position) {
-        String item = strings.get(position);
-        holder.bind(item);
+    public void onBindViewHolder(GalleryAdapter.ViewHolder holder, final int position) {
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (listener != null) {
+                    listener.onItemClicked(position);
+                }
+            }
+        });
+        String item = imageUrls.get(position);
+        Picasso.with(context).load(item)
+                .into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return strings.size();
+        return imageUrls.size();
+    }
+
+    public void setClickListener(ClickListener listener) {
+        this.listener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final LayoutRowItemBinding binding;
+        public final ImageView imageView;
 
-        public ViewHolder(LayoutRowItemBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
-
-        public void bind(String text) {
-            binding.setText(text);
-            binding.executePendingBindings();
+        public ViewHolder(View view) {
+            super(view);
+            this.imageView = view.findViewById(R.id.ivImage);
         }
     }
 }

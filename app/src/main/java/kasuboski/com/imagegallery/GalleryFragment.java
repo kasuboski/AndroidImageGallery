@@ -2,7 +2,6 @@ package kasuboski.com.imagegallery;
 
 
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,10 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import kasuboski.com.imagegallery.databinding.FragmentGalleryBinding;
 
 
@@ -24,7 +19,7 @@ import kasuboski.com.imagegallery.databinding.FragmentGalleryBinding;
  * Use the {@link GalleryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GalleryFragment extends Fragment {
+public class GalleryFragment extends Fragment implements GalleryAdapter.ClickListener {
 
     public static GalleryFragment newInstance() {
         return new GalleryFragment();
@@ -58,10 +53,9 @@ public class GalleryFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        GalleryAdapter galleryAdapter = new GalleryAdapter(viewModel.text);
+        GalleryAdapter galleryAdapter = new GalleryAdapter(getActivity(), viewModel.imageUrls);
+        galleryAdapter.setClickListener(this);
         recyclerView.setAdapter(galleryAdapter);
-
-        viewModel.text.add("New");
 
         super.onViewCreated(view, savedInstanceState);
     }
@@ -77,6 +71,11 @@ public class GalleryFragment extends Fragment {
     public void onResume() {
         super.onResume();
         viewModel.start();
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+        viewModel.imageClicked(position);
     }
 
     public void setViewModel(GalleryViewModel viewModel) {
