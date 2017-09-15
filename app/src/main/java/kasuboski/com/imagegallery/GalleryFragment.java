@@ -6,9 +6,15 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import kasuboski.com.imagegallery.databinding.FragmentGalleryBinding;
 
@@ -20,17 +26,14 @@ import kasuboski.com.imagegallery.databinding.FragmentGalleryBinding;
  */
 public class GalleryFragment extends Fragment {
 
-    public GalleryFragment() {
-        // Required empty public constructor
-    }
-
     public static GalleryFragment newInstance() {
-        GalleryFragment fragment = new GalleryFragment();
-        return fragment;
+        return new GalleryFragment();
     }
 
     FragmentGalleryBinding galleryBinding;
     GalleryViewModel viewModel;
+
+    RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,8 +46,24 @@ public class GalleryFragment extends Fragment {
         // Inflate the layout for this fragment
         galleryBinding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_gallery, container, false);
+        View root = galleryBinding.getRoot();
 
-        return galleryBinding.getRoot();
+        recyclerView = root.findViewById(R.id.rvGallery);
+
+        return root;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        recyclerView.setLayoutManager(gridLayoutManager);
+
+        GalleryAdapter galleryAdapter = new GalleryAdapter(viewModel.text);
+        recyclerView.setAdapter(galleryAdapter);
+
+        viewModel.text.add("New");
+
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -62,5 +81,9 @@ public class GalleryFragment extends Fragment {
 
     public void setViewModel(GalleryViewModel viewModel) {
         this.viewModel = viewModel;
+    }
+
+    public GalleryFragment() {
+        // Required empty public constructor
     }
 }

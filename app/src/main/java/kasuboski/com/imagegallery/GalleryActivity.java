@@ -21,11 +21,11 @@ public class GalleryActivity extends AppCompatActivity {
     @NonNull
     private GalleryFragment findOrCreateViewFragment() {
         GalleryFragment galleryFragment = (GalleryFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.contentFrame);
+                .findFragmentById(R.id.flContent);
         if (galleryFragment == null) {
             galleryFragment = GalleryFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
-                    galleryFragment, R.id.contentFrame);
+                    galleryFragment, R.id.flContent);
         }
         return galleryFragment;
     }
