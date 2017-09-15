@@ -3,6 +3,7 @@ package kasuboski.com.imagegallery;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -78,7 +79,7 @@ public class GalleryFragment extends Fragment implements GalleryAdapter.ClickLis
         viewModel.imageClicked(position);
     }
 
-    public void setViewModel(GalleryViewModel viewModel) {
+    public void setViewModel(@NonNull GalleryViewModel viewModel) {
         this.viewModel = viewModel;
     }
 

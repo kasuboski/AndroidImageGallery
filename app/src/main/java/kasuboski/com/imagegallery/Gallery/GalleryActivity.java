@@ -23,7 +23,7 @@ public class GalleryActivity extends AppCompatActivity implements ImageNavigator
 
     @Override
     public void navigateToFullImage(@Nullable String imageUrl) {
-        Log.d("NAVIGATE", "go to image : " + imageUrl);
+        startActivity(ImageDetailActivity.createIntent(this, imageUrl));
     }
 
     @NonNull

@@ -39,12 +39,13 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(GalleryAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(GalleryAdapter.ViewHolder holder, int position) {
+        final int pos = position;
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (listener != null) {
-                    listener.onItemClicked(position);
+                    listener.onItemClicked(pos);
                 }
             }
         });
