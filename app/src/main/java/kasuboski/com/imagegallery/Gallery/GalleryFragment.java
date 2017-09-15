@@ -1,4 +1,4 @@
-package kasuboski.com.imagegallery;
+package kasuboski.com.imagegallery.Gallery;
 
 
 import android.databinding.DataBindingUtil;
@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import kasuboski.com.imagegallery.R;
 import kasuboski.com.imagegallery.databinding.FragmentGalleryBinding;
 
 

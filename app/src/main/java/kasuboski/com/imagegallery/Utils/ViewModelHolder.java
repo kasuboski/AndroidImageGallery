@@ -1,4 +1,4 @@
-package kasuboski.com.imagegallery;
+package kasuboski.com.imagegallery.Utils;
 
 /**
  * Created by Josh Kasuboski on 9/14/17.

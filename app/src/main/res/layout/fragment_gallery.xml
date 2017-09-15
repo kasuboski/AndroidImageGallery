@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="kasuboski.com.imagegallery.GalleryViewModel"/>
+        <variable name="viewModel" type="kasuboski.com.imagegallery.Gallery.GalleryViewModel"/>
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="kasuboski.com.imagegallery.GalleryFragment">
+        tools:context="kasuboski.com.imagegallery.Gallery.GalleryFragment">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvGallery"

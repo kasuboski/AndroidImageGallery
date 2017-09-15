@@ -1,10 +1,16 @@
-package kasuboski.com.imagegallery;
+package kasuboski.com.imagegallery.Gallery;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+
+import kasuboski.com.imagegallery.Data.PhotosDataProvider;
+import kasuboski.com.imagegallery.ImageDetail.ImageDetailActivity;
+import kasuboski.com.imagegallery.ImageDetail.ImageNavigator;
+import kasuboski.com.imagegallery.R;
+import kasuboski.com.imagegallery.Utils.ActivityUtils;
+import kasuboski.com.imagegallery.Utils.ViewModelHolder;
 
 public class GalleryActivity extends AppCompatActivity implements ImageNavigator {
     private static final String GALLERY_VM_TAG = "GALLERY_VM_TAG";
@@ -52,7 +58,7 @@ public class GalleryActivity extends AppCompatActivity implements ImageNavigator
             return retainedViewModel.getViewmodel();
         } else {
             // There is no ViewModel yet, create it.
-            GalleryViewModel viewModel = new GalleryViewModel();
+            GalleryViewModel viewModel = new GalleryViewModel(new PhotosDataProvider());
 
             // and bind it to this Activity's lifecycle using the Fragment Manager.
             ActivityUtils.addFragmentToActivity(

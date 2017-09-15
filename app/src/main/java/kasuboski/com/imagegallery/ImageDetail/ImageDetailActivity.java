@@ -1,4 +1,4 @@
-package kasuboski.com.imagegallery;
+package kasuboski.com.imagegallery.ImageDetail;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,8 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+
+import kasuboski.com.imagegallery.R;
 
 public class ImageDetailActivity extends AppCompatActivity {
 
