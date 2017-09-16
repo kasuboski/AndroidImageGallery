@@ -30,18 +30,20 @@ public class GalleryViewModel {
     }
 
     public void start() {
-        imageUrls.clear();
-        photosDataProvider.getPhotos(0, PHOTOS_PER_PAGE, new PhotosDataProvider.GetPhotosCallback() {
-            @Override
-            public void onPhotosReceived(List<Photo> photos) {
-                handlePhotosReturned(photos);
-            }
+        if (imageUrls.isEmpty()) {
+            // only load photos if haven't before
+            photosDataProvider.getPhotos(0, PHOTOS_PER_PAGE, new PhotosDataProvider.GetPhotosCallback() {
+                @Override
+                public void onPhotosReceived(List<Photo> photos) {
+                    handlePhotosReturned(photos);
+                }
 
-            @Override
-            public void onError() {
-                // TODO
-            }
-        });
+                @Override
+                public void onError() {
+                    // TODO
+                }
+            });
+        }
     }
 
     public void loadMorePhotos(int page) {

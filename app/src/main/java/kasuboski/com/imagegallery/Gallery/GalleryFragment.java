@@ -33,7 +33,12 @@ public class GalleryFragment extends Fragment implements GalleryAdapter.ClickLis
     GalleryViewModel viewModel;
 
     RecyclerView recyclerView;
+    GridLayoutManager gridLayoutManager;
     EndlessRecyclerViewScrollListener scrollListener;
+
+    // used to save scroll position
+    int positionIndex = -1;
+    int topViewPos;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +60,7 @@ public class GalleryFragment extends Fragment implements GalleryAdapter.ClickLis
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
+        gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
 
         scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
@@ -93,7 +98,21 @@ public class GalleryFragment extends Fragment implements GalleryAdapter.ClickLis
     @Override
     public void onResume() {
         super.onResume();
+        if (positionIndex!= -1) {
+            gridLayoutManager.scrollToPositionWithOffset(positionIndex, topViewPos);
+        }
+
         viewModel.start();
+    }
+
+    @Override
+    public void onPause() {
+        positionIndex = gridLayoutManager.findFirstVisibleItemPosition();
+
+        View startView = recyclerView.getChildAt(0);
+        topViewPos = (startView == null) ? 0 : (startView.getTop() - recyclerView.getPaddingTop());
+
+        super.onPause();
     }
 
     @Override
