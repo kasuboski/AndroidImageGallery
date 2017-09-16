@@ -8,11 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import kasuboski.com.imagegallery.R;
+import kasuboski.com.imagegallery.Utils.EndlessRecyclerViewScrollListener;
 import kasuboski.com.imagegallery.databinding.FragmentGalleryBinding;
 
 
@@ -31,6 +33,7 @@ public class GalleryFragment extends Fragment implements GalleryAdapter.ClickLis
     GalleryViewModel viewModel;
 
     RecyclerView recyclerView;
+    EndlessRecyclerViewScrollListener scrollListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,24 @@ public class GalleryFragment extends Fragment implements GalleryAdapter.ClickLis
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(gridLayoutManager);
+
+        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
+            @Override
+            public void onLoadMore(final int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+
+                // post so that the recyclerView data isn't updated in the scrollCallback
+                recyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("Load", "loading more on page : " + page);
+                        viewModel.loadMorePhotos(page);
+                    }
+                });
+            }
+        };
+
+        recyclerView.addOnScrollListener(scrollListener);
 
         GalleryAdapter galleryAdapter = new GalleryAdapter(getActivity(), viewModel.imageUrls);
         galleryAdapter.setClickListener(this);

@@ -18,6 +18,8 @@ import kasuboski.com.imagegallery.ImageDetail.ImageNavigator;
  */
 
 public class GalleryViewModel {
+    public static final int PHOTOS_PER_PAGE = 15;
+
     public final ObservableList<String> imageUrls = new ObservableArrayList<>();
 
     private WeakReference<ImageNavigator> imageNavigator;
@@ -29,15 +31,10 @@ public class GalleryViewModel {
 
     public void start() {
         imageUrls.clear();
-        photosDataProvider.getPhotos(0, 4, new PhotosDataProvider.GetPhotosCallback() {
+        photosDataProvider.getPhotos(0, PHOTOS_PER_PAGE, new PhotosDataProvider.GetPhotosCallback() {
             @Override
             public void onPhotosReceived(List<Photo> photos) {
-                for (Photo photo : photos) {
-                    String url = photo.url;
-                    if (!TextUtils.isEmpty(url)) {
-                        imageUrls.add(url);
-                    }
-                }
+                handlePhotosReturned(photos);
             }
 
             @Override
@@ -45,8 +42,30 @@ public class GalleryViewModel {
                 // TODO
             }
         });
+    }
 
-//        imageUrls.add("https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/M82_HST_ACS_2006-14-a-large_web.jpg/1280px-M82_HST_ACS_2006-14-a-large_web.jpg");
+    public void loadMorePhotos(int page) {
+        int start = page * PHOTOS_PER_PAGE;
+        photosDataProvider.getPhotos(start, PHOTOS_PER_PAGE, new PhotosDataProvider.GetPhotosCallback() {
+            @Override
+            public void onPhotosReceived(List<Photo> photos) {
+                handlePhotosReturned(photos);
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
+    }
+
+    private void handlePhotosReturned(List<Photo> photos) {
+        for (Photo photo : photos) {
+            String url = photo.url;
+            if (!TextUtils.isEmpty(url)) {
+                imageUrls.add(url);
+            }
+        }
     }
 
     public void imageClicked(int position) {
