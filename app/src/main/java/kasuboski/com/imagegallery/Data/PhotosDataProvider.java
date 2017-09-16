@@ -17,6 +17,7 @@ import retrofit2.Response;
 public class PhotosDataProvider {
     public interface GetPhotosCallback {
         void onPhotosReceived(List<Photo> photos);
+
         void onError();
     }
 
@@ -29,14 +30,14 @@ public class PhotosDataProvider {
             API.service.getPhotos().enqueue(new Callback<List<Photo>>() {
                 @Override
                 public void onResponse(Call<List<Photo>> call, Response<List<Photo>> response) {
-                    if (response.body() != null) {
-                        photos = response.body();
-                        callback.onPhotosReceived(getSubsetOfPhotos(start, limit));
-                    } else {
+                    if (response.body() == null) {
                         Log.e(TAG, "Response body was null");
                         callback.onError();
+                        return;
                     }
 
+                    photos = response.body();
+                    callback.onPhotosReceived(getSubsetOfPhotos(start, limit));
                 }
 
                 @Override
@@ -51,8 +52,19 @@ public class PhotosDataProvider {
     }
 
     private List<Photo> getSubsetOfPhotos(int start, int limit) {
+        int end = limit;
         if (photos != null) {
-            return photos.subList(start, start + limit);
+            if (photos.size() <= start + end) {
+                // requesting end after available
+                // return rest of photos if needed;
+                if (photos.size() > start) {
+                    end = photos.size() - start;
+                } else {
+                    // don't return more photos
+                    return null;
+                }
+            }
+            return photos.subList(start, start + end);
         } else {
             return null;
         }

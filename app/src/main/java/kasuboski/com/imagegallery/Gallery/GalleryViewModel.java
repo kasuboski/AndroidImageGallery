@@ -18,7 +18,7 @@ import kasuboski.com.imagegallery.ImageDetail.ImageNavigator;
  */
 
 public class GalleryViewModel {
-    public static final int PHOTOS_PER_PAGE = 15;
+    public static final int PHOTOS_PER_PAGE = 30;
 
     public final ObservableList<String> imageUrls = new ObservableArrayList<>();
 
@@ -40,7 +40,7 @@ public class GalleryViewModel {
 
                 @Override
                 public void onError() {
-                    // TODO
+                    handleError();
                 }
             });
         }
@@ -56,18 +56,24 @@ public class GalleryViewModel {
 
             @Override
             public void onError() {
-
+                handleError();
             }
         });
     }
 
     private void handlePhotosReturned(List<Photo> photos) {
-        for (Photo photo : photos) {
-            String url = photo.url;
-            if (!TextUtils.isEmpty(url)) {
-                imageUrls.add(url);
+        if (photos != null) {
+            for (Photo photo : photos) {
+                String url = photo.url;
+                if (!TextUtils.isEmpty(url)) {
+                    imageUrls.add(url);
+                }
             }
         }
+    }
+
+    private void handleError() {
+        //normally you'd want to show some sort of error
     }
 
     public void imageClicked(int position) {

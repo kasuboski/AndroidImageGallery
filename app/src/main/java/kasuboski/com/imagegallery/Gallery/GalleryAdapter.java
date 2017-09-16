@@ -3,7 +3,6 @@ package kasuboski.com.imagegallery.Gallery;
 import android.content.Context;
 import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.lang.ref.WeakReference;
 
 import kasuboski.com.imagegallery.R;
+import kasuboski.com.imagegallery.Utils.DisplayUtils;
 
 /**
  * Created by Josh Kasuboski on 9/14/17.
@@ -25,9 +25,12 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         void onItemClicked(int position);
     }
 
+    private static final int NUM_COLUMNS = 3;
+
+    private int imageSize;
+
     private ObservableList<String> imageUrls;
     private Context context;
-    private final WeakReferenceOnListChangedCallback onListChangedCallback;
 
     private ClickListener listener;
 
@@ -35,14 +38,16 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         this.context = context;
         this.imageUrls = imageUrls;
 
-        this.onListChangedCallback = new WeakReferenceOnListChangedCallback<>(this);
+        WeakReferenceOnListChangedCallback onListChangedCallback = new WeakReferenceOnListChangedCallback<>(this);
         this.imageUrls.addOnListChangedCallback(onListChangedCallback);
+
+        imageSize = DisplayUtils.calculateColumnWidthPixels(context, NUM_COLUMNS);
     }
 
     @Override
     public GalleryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_row_item, parent, false);
+                .inflate(R.layout.layout_image_row_item, parent, false);
 
         return new ViewHolder(v);
     }
@@ -60,6 +65,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         });
         String item = imageUrls.get(position);
         Picasso.with(context).load(item)
+                .fit()
                 .into(holder.imageView);
     }
 
@@ -121,12 +127,17 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         }
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
         public final ImageView imageView;
 
         public ViewHolder(View view) {
             super(view);
             this.imageView = view.findViewById(R.id.ivImage);
+            // set image size to avoid out of memory exception from Picasso
+            // when loading a ton of images at once
+            imageView.getLayoutParams().width = imageSize;
+            imageView.getLayoutParams().height = imageSize;
         }
     }
 }
