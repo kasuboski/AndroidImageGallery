@@ -17,7 +17,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ImageDetail.ImageDetailActivity"></activity>
+        <activity android:name=".ImageDetail.ImageDetailActivity"
+            android:parentActivityName=".Gallery.GalleryActivity"
+            >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Gallery.GalleryActivity" />
+        </activity>
     </application>
 
 </manifest>
