@@ -2,9 +2,10 @@ package kasuboski.com.imagegallery.ImageDetail;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
@@ -33,5 +34,17 @@ public class ImageDetailActivity extends AppCompatActivity {
             Picasso.with(this).load(imageUrl)
                     .into(imageView);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // make up the same as back
+                onBackPressed();
+                return true;
+        }
+
+        return(super.onOptionsItemSelected(item));
     }
 }

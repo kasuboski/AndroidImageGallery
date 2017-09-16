@@ -4,7 +4,6 @@ import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

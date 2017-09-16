@@ -72,7 +72,6 @@ public class GalleryFragment extends Fragment implements GalleryAdapter.ClickLis
                 recyclerView.post(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("Load", "loading more on page : " + page);
                         viewModel.loadMorePhotos(page);
                     }
                 });
@@ -98,7 +97,9 @@ public class GalleryFragment extends Fragment implements GalleryAdapter.ClickLis
     @Override
     public void onResume() {
         super.onResume();
-        if (positionIndex!= -1) {
+
+        // scroll to past position
+        if (positionIndex != -1) {
             gridLayoutManager.scrollToPositionWithOffset(positionIndex, topViewPos);
         }
 
@@ -107,12 +108,16 @@ public class GalleryFragment extends Fragment implements GalleryAdapter.ClickLis
 
     @Override
     public void onPause() {
+        saveCurrentScrollPosition();
+
+        super.onPause();
+    }
+
+    private void saveCurrentScrollPosition() {
         positionIndex = gridLayoutManager.findFirstVisibleItemPosition();
 
         View startView = recyclerView.getChildAt(0);
         topViewPos = (startView == null) ? 0 : (startView.getTop() - recyclerView.getPaddingTop());
-
-        super.onPause();
     }
 
     @Override
