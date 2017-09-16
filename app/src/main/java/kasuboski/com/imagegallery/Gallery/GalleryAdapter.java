@@ -65,6 +65,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         });
         String item = imageUrls.get(position);
         Picasso.with(context).load(item)
+                .placeholder(R.drawable.ic_placeholder)
+                .error(R.drawable.ic_error)
                 .fit()
                 .into(holder.imageView);
     }
